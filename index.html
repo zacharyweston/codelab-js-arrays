@@ -5,93 +5,107 @@
   </head>
   <body>
     <header>
-       <h1>Don't Not Do List</h1>
+       <h1>To Do List</h1>
     </header>
     <main>
-      <input id="newTodoInput" type="text">
+      <form>
+        <input id="newTodoTitle" type="text">
+        <input id="newTodoDescription" type="text">
+        <input id="newTodoSubmit" type="button" value="Add">
+      </form>
       <ul id="todoList"></ul>
       <p id="counter">0</p>
       <button type="button" id="randomizer">Can't Decide!</button>
       <br>
       <button type="button" id="clearAll">Clear All</button>
     </main>
-      <script>
-        // ------------
-        // GLOBAL STATE
-        // ------------
+    <script>
+      // ------------
+      // GLOBAL STATE
+      // ------------
 
-        var todos = [];
+      var todos = [];
 
-        // --------
-        // ELEMENTS
-        // --------
+      // --------
+      // ELEMENTS
+      // --------
 
-        var newTodoInput = document.getElementById('newTodoInput');
-        var todoList = document.getElementById('todoList');
-        var counter = document.getElementById("counter");
-        var randomizerButton = document.getElementById('randomizer');
-        var clearAllButton = document.getElementById('clearAll');
+      var newTodoTitle = document.getElementById('newTodoTitle');
+      var newTodoDescription = document.getElementById('newTodoDescription');
+      var newTodoSubmit = document.getElementById('newTodoSubmit')
+      var todoList = document.getElementById('todoList');
+      var counter = document.getElementById("counter");
+      var randomizerButton = document.getElementById('randomizer');
+      var clearAllButton = document.getElementById('clearAll');
 
-        // ---------
-        // RENDERERS
-        // ---------
+      // ---------
+      // RENDERERS
+      // ---------
 
-        // Renders list of todos items
-        function renderTodos() {
-          todoList.innerHTML = todos.map(function(todo, index) {
-            return '<li class="item">' +
-              todo +
-              ' <button class="removeTodo" data-index="' + index + '">X</button>' +
-            '</li>';
-          }).join('');
-        }
+      // Renders the current number of todos
+      // This should still work
+      function renderTodosCount() {
+        var count = todos.length;
+        counter.innerHTML = count;
+      }
 
-        // Renders the current number of todos
-        function renderTodosCount() {
-          var count = todos.length;
-          counter.innerHTML = count;
-        }
 
-        // Renders the entire todo list
-        function renderAll() {
-          renderTodos();
-          renderTodosCount();
-        }
+      // Renders list of todos items
+      function renderTodos() {
+        todoList.innerHTML = todos.map(function(todo, index) {
+          return '<li class="item">' + '<input type="checkbox"> ' +
+            '<label title="'+ todo.description + '">'+ todo.title + '</label>' +
+            ' <button class="removeTodo" data-index="' + index + '">X</button>' +
+          '</li>';
+        }).join('');
+      }
 
-        // ------
-        // EVENTS
-        // ------
+      // Renders the entire todo list
+      //This should still work
+      function renderAll() {
+        renderTodos();
+        renderTodosCount();
+      }
 
-        // Displays a random todo item
-        randomizerButton.onclick = function() {
-          var randomNumber = Math.floor(Math.random() * todos.length);
-          var randomItem = todos[randomNumber];
-          alert(randomItem);
-        };
+      // ------
+      // EVENTS
+      // ------
 
-        // Clears all todo items
-        clearAllButton.onclick = function() {
-          todos = [];
+      // Displays a random todo item
+      // This should still work
+      randomizerButton.onclick = function() {
+        var randomNumber = Math.floor(Math.random() * todos.length);
+        var randomItem = todos[randomNumber];
+        alert(randomItem);
+      };
+
+      // Clears all todo items
+      // This should still work
+      clearAllButton.onclick = function() {
+        todos = [];
+        renderAll();
+      };
+
+      // Adds a new todo item
+      newTodoSubmit.onclick = function(event) {
+          todos.push({
+            title: newTodoTitle.value,
+            description: newTodoDescription.value,
+            isComplete: false
+          });
+          newTodoTitle.value = '';
+          newTodoDescription.value = '';
           renderAll();
-        };
+      };
 
-        // Adds a new todo item
-        newTodoInput.onkeypress = function(event) {
-          if (event.which === 13) {
-            todos.push(this.value);
-            this.value = '';
-            renderAll();
-          }
-        };
-
-        // Deletes a todo item
-        todoList.onclick = function(event) {
-          var clickedElement = event.target;
-          if (clickedElement.className === 'removeTodo') {
-            todos.splice(clickedElement.dataset.index, 1);
-            renderAll();
-          }
-        };
-      </script>
-    </body>
+      // Deletes a todo item
+      todoList.onclick = function(event) {
+        var clickedElement = event.target;
+        if (clickedElement.className === 'removeTodo') {
+          todos.splice(clickedElement.dataset.index, 1);
+          renderAll();
+        }
+      };
+    </script>
+  </body>
 </html>
